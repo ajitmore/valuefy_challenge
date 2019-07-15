@@ -1,1 +1,3 @@
-# valuefy_challenge
+# ValueFy_Coding_Challenge
+
+Git pull
