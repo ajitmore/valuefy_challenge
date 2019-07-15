@@ -1,0 +1,16 @@
+{
+  "name": "valuefy_coding_challenge",
+  "version": "1.0.0",
+  "description": "This is coding challenge of valuefy",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ajit More",
+  "license": "ISC",
+  "dependencies": {
+    "bluebird": "^3.5.5",
+    "cheerio": "^1.0.0-rc.3",
+    "request-promise": "^4.2.4"
+  }
+}
