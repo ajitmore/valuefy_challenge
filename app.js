@@ -1,7 +1,8 @@
-var Promise = require("bluebird");
-var rp = require('request-promise');
-var cheerio = require('cheerio');
-var fs = require('fs').promises;
+var Promise = require("bluebird"),
+    rp = require('request-promise'),
+    cheerio = require('cheerio'),
+    fsys = require('fs'),
+    fs = require('fs').promises;
 
 var url = "https://medium.com/";
 
@@ -17,7 +18,6 @@ scanPage = async (url) => {
         timeout: 60000
     }
     try {
-        debugger;
         const response = await rp(options);
         const $ = cheerio.load(response.body);
         $('a.ds-link').each(function (i, elem) {
@@ -27,18 +27,32 @@ scanPage = async (url) => {
                 console.log(elem.attribs.href);
             }
         });
-        debugger;
-        //allPages.push(listofPageURL);
         Promise.map(listofPageURL, scanPage, { concurrency: 5 }).then((result) => {
-            debugger;
             uniqueValues = new Set(allPages);
             uniqueArray = [...uniqueValues]
             const file = fs.readFile('urls.txt', 'utf8').then(() => {
                 fs.appendFile('urls.txt', uniqueArray.toString() + "\n");
             });
-            
+
         });
-    } catch (error) {}
+    } catch (error) { }
 }
 
-scanPage(url);
+createFile = (fileName) => {
+    return new Promise((success, reject) => {
+        fsys.access(fileName, fsys.constants.F_OK, function (err) {
+            if (err) {
+                fs.writeFile(fileName, '').then(() => {
+                    success();
+                }).catch(() => { reject(); });
+            } else {
+                success();
+            }
+        });
+    });
+}
+
+createFile('urls.txt').then(() => {
+    scanPage(url);
+}).catch(() => console.log('Failed to create file'));
+
